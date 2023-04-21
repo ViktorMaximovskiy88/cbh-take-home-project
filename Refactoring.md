@@ -18,7 +18,6 @@ const crypto = require('crypto');
  * @returns {string} - Returns the input's hex hash string.
  */
 function hash(input) {
-  if(input == undefined) input = "";
   return crypto.createHash("sha3-512").update(input).digest("hex");
 }
 /**
@@ -33,7 +32,7 @@ function deterministicPartitionKey(event) {
 
   //?. and ?? operators are called the optional chaining operator and nullish coalescing operator.
   //recently added in ES2020
-  let candidate = event?.partitionKey ?? hash(JSON.stringify(event)) ?? TRIVIAL_PARTITION_KEY;
+  let candidate = event?.partitionKey ?? hash(JSON.stringify(event)||"") ?? TRIVIAL_PARTITION_KEY;
   
   candidate = candidate.toString();
   candidate = candidate.length > MAX_PARTITION_KEY_LENGTH ? hash(candidate): candidate;
